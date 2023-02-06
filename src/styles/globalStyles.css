@@ -10,11 +10,3 @@
 body {
   background-color: #1a1d1e;
 }
-
-.app {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  min-height: 100vh;
-}

@@ -9,3 +9,21 @@
 .input::placeholder {
   color: #7e868c;
 }
+
+.container__input {
+  padding: 10px 16px;
+  width: 100%;
+  border-radius: 4px;
+  background-color: #202425;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.container__input svg {
+  color: #7e868c;
+}
+
+.container__input:focus-within {
+  border: 1px solid #8dcec3;
+}

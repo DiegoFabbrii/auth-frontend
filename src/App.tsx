@@ -1,10 +1,10 @@
-import { Login } from './pages/login/Login';
+import { Login } from './pages/login';
 
 function App() {
   return (
-    <div className="app">
+    <>
       <Login />
-    </div>
+    </>
   );
 }
 
