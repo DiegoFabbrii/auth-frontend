@@ -1,6 +1,7 @@
 import styles from './styles.module.css';
 import { HiOutlineMail, HiOutlineLockClosed } from 'react-icons/hi';
 import { Input } from '../../components/input/Input';
+import { Button } from '../../components/button';
 
 export function Login() {
   return (
@@ -16,9 +17,8 @@ export function Login() {
           <HiOutlineLockClosed color="#7e868c" />
           <Input placeholder="senha" type="password" name="password" />
         </div>
-        <button className={styles.button} type="submit">
-          Entrar
-        </button>
+
+        <Button text="Entrar" />
       </form>
     </div>
   );
