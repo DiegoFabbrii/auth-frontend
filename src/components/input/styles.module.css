@@ -1,0 +1,11 @@
+.input {
+  flex: 1;
+  background-color: transparent;
+  color: #c1c8cd;
+  border: none;
+  outline: none;
+}
+
+.input::placeholder {
+  color: #7e868c;
+}
