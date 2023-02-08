@@ -1,5 +1,5 @@
 import { HiOutlineMail, HiOutlineLockClosed } from 'react-icons/hi';
-import { Input } from '../../components/input/Input';
+import { Input } from '../../components/input';
 import { Button } from '../../components/button';
 import { Container } from '../../components/container';
 import { Form } from '../../components/form';

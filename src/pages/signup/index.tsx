@@ -1,24 +1,48 @@
+import { SyntheticEvent, useRef } from 'react';
+
 import { Button } from '../../components/button';
-import { Input } from '../../components/input/Input';
+import { Input } from '../../components/input';
+import { Container } from '../../components/container';
+import { Form } from '../../components/form';
+import { api } from '../../services/api';
+
 import {
   HiOutlineMail,
   HiOutlineLockClosed,
   HiOutlineUserCircle,
 } from 'react-icons/hi';
-import { Container } from '../../components/container';
-import { Form } from '../../components/form';
 
 export function Signup() {
+  const signUpFormRef = useRef<HTMLFormElement | null>(null);
+
+  const onSubmit = (event: SyntheticEvent): void => {
+    event.preventDefault();
+
+    if (signUpFormRef.current) {
+      const username = signUpFormRef.current.username.value;
+      const email = signUpFormRef.current.email.value;
+      const password = signUpFormRef.current.password.value;
+
+      api
+        .post('/register', { username, email, password })
+        .then((response) => alert(response.data.message))
+        .catch((error) => {
+          alert(error.response.data.error);
+        });
+    }
+  };
+
   return (
     <Container>
       <h1>Cadastre-se</h1>
-      <Form>
+      <Form onSubmit={onSubmit} formRef={signUpFormRef}>
         <Input
           type="text"
           name="username"
           Icon={<HiOutlineUserCircle />}
           placeholder="nome de usuário"
         />
+
         <Input
           type="email"
           name="email"
