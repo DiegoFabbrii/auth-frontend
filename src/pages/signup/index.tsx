@@ -25,7 +25,15 @@ export function Signup() {
 
       api
         .post('/register', { username, email, password })
-        .then((response) => alert(response.data.message))
+        .then((response) => {
+          alert(response.data.message);
+
+          if (signUpFormRef.current) {
+            signUpFormRef.current.username.value = '';
+            signUpFormRef.current.email.value = '';
+            signUpFormRef.current.password.value = '';
+          }
+        })
         .catch((error) => {
           alert(error.response.data.error);
         });
