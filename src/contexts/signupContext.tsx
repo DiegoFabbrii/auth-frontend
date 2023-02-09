@@ -31,7 +31,7 @@ export function SignupContextProvider({
     if (signupFormRef.current) {
       const username = signupFormRef.current.username.value;
       const email = signupFormRef.current.email.value;
-      const password = signupFormRef.current.username.value;
+      const password = signupFormRef.current.password.value;
 
       api
         .post('/register', { username, email, password })
