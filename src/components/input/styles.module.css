@@ -1,15 +1,3 @@
-.input {
-  flex: 1;
-  background-color: transparent;
-  color: #c1c8cd;
-  border: none;
-  outline: none;
-}
-
-.input::placeholder {
-  color: #7e868c;
-}
-
 .container__input {
   padding: 10px 16px;
   width: 100%;
@@ -26,4 +14,16 @@
 
 .container__input:focus-within {
   border: 1px solid #8dcec3;
+}
+
+.input {
+  flex: 1;
+  background-color: transparent;
+  color: #c1c8cd;
+  border: none;
+  outline: none;
+}
+
+.input::placeholder {
+  color: #7e868c;
 }

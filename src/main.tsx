@@ -6,6 +6,7 @@ import './styles/globalStyles.css';
 import { Signup } from './pages/signup';
 import { User } from './pages/user';
 import { MainContextProvider } from './contexts/mainContext';
+import { PrivateRoutes } from './routes/privateRoutes';
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,13 @@ const router = createBrowserRouter([
 
   {
     path: '/user/:id',
-    element: <User />,
+    element: <PrivateRoutes />,
+    children: [
+      {
+        path: '/user/:id',
+        element: <User />,
+      },
+    ],
   },
 ]);
 

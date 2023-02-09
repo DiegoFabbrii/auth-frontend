@@ -8,12 +8,16 @@ import {
   HiOutlineLockClosed,
   HiOutlineUserCircle,
 } from 'react-icons/hi';
+import { SignupContext } from '../../contexts/signupContext';
+import { useContext } from 'react';
 
 export function Signup() {
+  const signupContext = SignupContext;
+  const { onSubmit, signupFormRef } = useContext(signupContext);
   return (
     <Container>
       <h1>Cadastre-se</h1>
-      <Form>
+      <Form onSubmit={onSubmit} formRef={signupFormRef}>
         <Input
           type="text"
           name="username"
