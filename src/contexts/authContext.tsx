@@ -6,9 +6,12 @@ import {
   useRef,
   useState,
   useEffect,
+  useContext,
 } from 'react';
+
 import { Navigate } from 'react-router-dom';
 import { api } from '../services/api';
+import { SignupContext } from './signupContext';
 
 interface IAuthContext {
   authFormRef: RefObject<HTMLFormElement>;
@@ -34,6 +37,9 @@ interface IUser {
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const authFormRef = useRef<HTMLFormElement | null>(null);
   const [user, setUser] = useState<IUser | null>(null);
+
+  const signupContext = SignupContext;
+  const { setUserEmail } = useContext(signupContext);
 
   useEffect(() => {
     function getLocalStorageData() {
@@ -66,6 +72,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
           localStorage.setItem('@Auth:token', token as string);
           localStorage.setItem('@Auth:user', JSON.stringify(userData));
+
+          setUserEmail(null);
         })
         .catch((error) => alert(error.response.data.error));
     }

@@ -4,12 +4,17 @@ import {
   RefObject,
   SyntheticEvent,
   useRef,
+  useState,
 } from 'react';
+
 import { api } from '../services/api';
 
 interface SignUpContextType {
   signupFormRef: RefObject<HTMLFormElement>;
   onSubmit: (event: SyntheticEvent) => void;
+  registered: boolean;
+  userEmail: string | null;
+  setUserEmail: (value: string | null) => void;
 }
 
 interface SignUpContextProviderProps {
@@ -24,6 +29,8 @@ export function SignupContextProvider({
   children,
 }: SignUpContextProviderProps) {
   const signupFormRef = useRef<HTMLFormElement | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [registered, setRegistered] = useState<boolean>(false);
 
   function onSubmit(event: SyntheticEvent) {
     event.preventDefault();
@@ -35,13 +42,18 @@ export function SignupContextProvider({
 
       api
         .post('/register', { username, email, password })
-        .then((response) => alert(response.data.message))
+        .then((response) => {
+          setRegistered(true);
+          setUserEmail(email);
+        })
         .catch((error) => alert(error.response.data.error));
     }
   }
 
   return (
-    <SignupContext.Provider value={{ signupFormRef, onSubmit }}>
+    <SignupContext.Provider
+      value={{ signupFormRef, onSubmit, registered, userEmail, setUserEmail }}
+    >
       {children}
     </SignupContext.Provider>
   );

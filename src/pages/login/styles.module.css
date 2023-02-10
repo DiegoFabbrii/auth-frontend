@@ -1,0 +1,15 @@
+.signupLink {
+  text-align: center;
+  font-size: 0.75rem;
+  margin-top: 24px;
+  color: #7e868c;
+}
+
+.signupLink a {
+  color: #7e868c;
+}
+
+.label {
+  font-size: 14px;
+  color: #e5e7eb;
+}

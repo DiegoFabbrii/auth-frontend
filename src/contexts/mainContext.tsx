@@ -11,9 +11,9 @@ interface MainContextProviderProps {
 export function MainContextProvider({ children }: MainContextProviderProps) {
   return (
     <MainContext.Provider value={{}}>
-      <AuthContextProvider>
-        <SignupContextProvider>{children}</SignupContextProvider>
-      </AuthContextProvider>
+      <SignupContextProvider>
+        <AuthContextProvider>{children}</AuthContextProvider>
+      </SignupContextProvider>
     </MainContext.Provider>
   );
 }

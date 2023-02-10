@@ -6,9 +6,16 @@ interface InputProps {
   placeholder: string;
   type: string;
   Icon: ReactNode;
+  inputValue?: string;
 }
 
-export function Input({ name, placeholder, type, Icon }: InputProps) {
+export function Input({
+  name,
+  placeholder,
+  type,
+  Icon,
+  inputValue,
+}: InputProps) {
   return (
     <div className={styles.container__input}>
       {Icon}
@@ -19,6 +26,7 @@ export function Input({ name, placeholder, type, Icon }: InputProps) {
         placeholder={placeholder}
         type={type}
         required
+        defaultValue={inputValue}
       />
     </div>
   );

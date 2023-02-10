@@ -1,0 +1,25 @@
+.signinLink {
+  text-align: center;
+  font-size: 0.75rem;
+  margin-top: 24px;
+  color: #7e868c;
+}
+
+.signinLink a {
+  color: #7e868c;
+}
+
+.label {
+  font-size: 0.875rem;
+  color: #e5e7eb;
+}
+
+@media (max-width: 280px) {
+  .label {
+    font-size: 0.75rem;
+  }
+
+  .signinLink {
+    font-size: 0.625rem;
+  }
+}

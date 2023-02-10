@@ -1,8 +1,11 @@
 .container__input {
   padding: 10px 16px;
   width: 100%;
-  border-radius: 4px;
-  background-color: #202425;
+  background: linear-gradient(
+    180deg,
+    rgba(38, 41, 43, 0) 0%,
+    hsl(204, 25%, 9%) 100%
+  );
   display: flex;
   align-items: center;
   gap: 12px;
@@ -13,7 +16,7 @@
 }
 
 .container__input:focus-within {
-  border: 1px solid #8dcec3;
+  border-bottom: 2px solid #afdfd7;
 }
 
 .input {
@@ -26,4 +29,14 @@
 
 .input::placeholder {
   color: #7e868c;
+}
+
+@media (max-width: 280px) {
+  .input {
+    font-size: 0.75rem;
+  }
+
+  .input::placeholder {
+    font-size: 0.75rem;
+  }
 }
