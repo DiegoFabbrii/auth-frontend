@@ -1,58 +1,52 @@
+import { createContext, ReactNode, useState } from 'react';
 import {
-  createContext,
-  ReactNode,
-  RefObject,
-  SyntheticEvent,
-  useRef,
-  useState,
-} from 'react';
-
+  FieldValues,
+  SubmitHandler,
+  useForm,
+  UseFormReturn,
+} from 'react-hook-form';
 import { api } from '../services/api';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { signupSchema } from '../validations/signupValidation';
 
-interface SignUpContextType {
-  signupFormRef: RefObject<HTMLFormElement>;
-  onSubmit: (event: SyntheticEvent) => void;
-  registered: boolean;
+interface ISignupContext {
+  onSubmit: SubmitHandler<FieldValues>;
   userEmail: string | null;
-  setUserEmail: (value: string | null) => void;
+  registered: boolean;
+  methods: UseFormReturn<IFormValues, any>;
 }
 
-interface SignUpContextProviderProps {
+export interface IFormValues {
+  username: string;
+  email: string;
+  password: string;
+}
+
+interface SignupContextProviderProps {
   children: ReactNode;
 }
 
-export const SignupContext = createContext<SignUpContextType>(
-  {} as SignUpContextType
-);
+export const SignupContext = createContext({} as ISignupContext);
 
 export function SignupContextProvider({
   children,
-}: SignUpContextProviderProps) {
-  const signupFormRef = useRef<HTMLFormElement | null>(null);
+}: SignupContextProviderProps) {
+  const methods = useForm<IFormValues>({ resolver: yupResolver(signupSchema) });
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [registered, setRegistered] = useState<boolean>(false);
 
-  function onSubmit(event: SyntheticEvent) {
-    event.preventDefault();
-
-    if (signupFormRef.current) {
-      const username = signupFormRef.current.username.value;
-      const email = signupFormRef.current.email.value;
-      const password = signupFormRef.current.password.value;
-
-      api
-        .post('/register', { username, email, password })
-        .then((response) => {
-          setRegistered(true);
-          setUserEmail(email);
-        })
-        .catch((error) => alert(error.response.data.error));
-    }
-  }
-
+  const onSubmit: SubmitHandler<FieldValues> = (data: FieldValues) => {
+    api
+      .post('/register', data)
+      .then(() => {
+        setUserEmail(data.email);
+        setRegistered(true);
+      })
+      .catch((error) => alert(error.response.data.error));
+  };
   return (
     <SignupContext.Provider
-      value={{ signupFormRef, onSubmit, registered, userEmail, setUserEmail }}
+      value={{ onSubmit, methods, userEmail, registered }}
     >
       {children}
     </SignupContext.Provider>

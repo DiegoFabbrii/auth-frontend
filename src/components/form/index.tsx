@@ -1,15 +1,20 @@
-import { ReactNode, RefObject, SyntheticEvent } from 'react';
+import { ReactNode } from 'react';
+import { FieldValues, SubmitHandler, useFormContext } from 'react-hook-form';
 import styles from './styles.module.css';
 
 interface FormProps {
   children: ReactNode;
-  formRef: RefObject<HTMLFormElement>;
-  onSubmit: (event: SyntheticEvent) => void;
+  onSubmit: SubmitHandler<FieldValues>;
 }
 
-export function Form({ children, formRef, onSubmit }: FormProps) {
+export function Form({ children, onSubmit }: FormProps) {
+  const methods = useFormContext();
+
   return (
-    <form className={styles.container__form} onSubmit={onSubmit} ref={formRef}>
+    <form
+      className={styles.container__form}
+      onSubmit={methods.handleSubmit(onSubmit)}
+    >
       {children}
     </form>
   );

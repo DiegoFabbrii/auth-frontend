@@ -1,93 +1,81 @@
+import { createContext, ReactNode, useState, useEffect } from 'react';
 import {
-  createContext,
-  ReactNode,
-  RefObject,
-  SyntheticEvent,
-  useRef,
-  useState,
-  useEffect,
-  useContext,
-} from 'react';
-
+  FieldValues,
+  SubmitHandler,
+  useForm,
+  UseFormReturn,
+} from 'react-hook-form';
 import { Navigate } from 'react-router-dom';
 import { api } from '../services/api';
-import { SignupContext } from './signupContext';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { authSchema } from '../validations/authValidation';
 
 interface IAuthContext {
-  authFormRef: RefObject<HTMLFormElement>;
-  onSubmit: (event: SyntheticEvent) => void;
-  user: IUser | null;
+  onSubmit: SubmitHandler<FieldValues>;
+  methods: UseFormReturn<IFormValues, any>;
   signed: boolean;
-  logout: () => ReactNode;
+  user: IUser | null;
+  logout(): ReactNode;
 }
-
-export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 interface AuthContextProviderProps {
   children: ReactNode;
+}
+
+interface IFormValues {
+  email: string;
+  password: string;
 }
 
 interface IUser {
   id: string;
   username: string;
   email: string;
-  token?: string;
 }
 
+export const AuthContext = createContext({} as IAuthContext);
+
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
-  const authFormRef = useRef<HTMLFormElement | null>(null);
+  const methods = useForm<IFormValues>({ resolver: yupResolver(authSchema) });
   const [user, setUser] = useState<IUser | null>(null);
 
-  const signupContext = SignupContext;
-  const { setUserEmail } = useContext(signupContext);
-
   useEffect(() => {
-    function getLocalStorageData() {
-      const tokenStorage = localStorage.getItem('@Auth:token');
-      const userStorage = localStorage.getItem('@Auth:user');
+    (() => {
+      const userLoged = JSON.parse(
+        localStorage.getItem('@Auth:user') as string
+      );
+      const tokenUser = localStorage.getItem('@Auth:token');
 
-      if (tokenStorage && userStorage) {
-        setUser(JSON.parse(userStorage as string));
+      if (userLoged && tokenUser) {
+        setUser(userLoged);
       }
-    }
-
-    getLocalStorageData();
+    })();
   }, []);
 
-  function onSubmit(event: SyntheticEvent): void {
-    event.preventDefault();
+  const onSubmit: SubmitHandler<FieldValues> = (data: FieldValues) => {
+    api
+      .post('/auth', data)
+      .then((response) => {
+        const { token, ...userData } = response.data;
 
-    if (authFormRef.current) {
-      const email = authFormRef.current.email.value;
-      const password = authFormRef.current.password.value;
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        setUser(userData);
 
-      api
-        .post('/auth', { email, password })
-        .then((response) => {
-          const { token, ...userData }: IUser = response.data;
+        localStorage.setItem('@Auth:token', token);
+        localStorage.setItem('@Auth:user', JSON.stringify(userData));
+      })
+      .catch((error) => alert(error.response.data.error));
+  };
 
-          setUser(userData);
-
-          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-          localStorage.setItem('@Auth:token', token as string);
-          localStorage.setItem('@Auth:user', JSON.stringify(userData));
-
-          setUserEmail(null);
-        })
-        .catch((error) => alert(error.response.data.error));
-    }
-  }
-
-  function logout(): ReactNode {
+  const logout = () => {
     localStorage.clear();
     setUser(null);
     return <Navigate to="/" />;
-  }
+  };
 
   return (
     <AuthContext.Provider
-      value={{ authFormRef, onSubmit, user, signed: !!user, logout }}
+      value={{ methods, onSubmit, signed: !!user, user, logout }}
     >
       {children}
     </AuthContext.Provider>

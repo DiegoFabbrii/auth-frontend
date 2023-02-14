@@ -31,6 +31,12 @@
   color: #7e868c;
 }
 
+.messageError {
+  margin-top: 10px;
+  color: #f3aeaf;
+  font-size: 0.625rem;
+}
+
 @media (max-width: 280px) {
   .input {
     font-size: 0.75rem;

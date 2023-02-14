@@ -1,33 +1,49 @@
 import { ReactNode } from 'react';
+import { Path, useFormContext } from 'react-hook-form';
+import { IFormValues } from '../../contexts/signupContext';
+import errorsJson from '../../utils/errors.json';
+
 import styles from './styles.module.css';
 
 interface InputProps {
-  name: string;
   placeholder: string;
   type: string;
   Icon: ReactNode;
-  inputValue?: string;
+  inputName: Path<IFormValues>;
+  fieldError: string;
 }
 
 export function Input({
-  name,
   placeholder,
   type,
   Icon,
-  inputValue,
+  inputName,
+  fieldError,
 }: InputProps) {
-  return (
-    <div className={styles.container__input}>
-      {Icon}
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
 
-      <input
-        className={styles.input}
-        name={name}
-        placeholder={placeholder}
-        type={type}
-        required
-        defaultValue={inputValue}
-      />
+  return (
+    <div>
+      <div className={styles.container__input}>
+        {Icon}
+
+        <input
+          className={styles.input}
+          placeholder={placeholder}
+          {...register(inputName)}
+          type={type}
+          autoComplete="off"
+        />
+      </div>
+      {errors[fieldError]?.type && (
+        <small className={styles.messageError}>
+          {/* @ts-expect-error */}
+          {errorsJson[fieldError][errors[fieldError]?.type]}
+        </small>
+      )}
     </div>
   );
 }

@@ -1,0 +1,15 @@
+{
+  "username": {
+    "required": "Nome de usuário é obrigatório"
+  },
+
+  "email": {
+    "required": "E-mail é obrigatório",
+    "email": "Informe um e-mail válido"
+  },
+
+  "password": {
+    "required": "Senha é obrigatória",
+    "min": "Senha deve ter pelo menos 6 caracteres"
+  }
+}
