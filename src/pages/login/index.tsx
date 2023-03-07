@@ -14,7 +14,7 @@ import { FormProvider } from 'react-hook-form';
 export function Login() {
   const authContext = AuthContext;
 
-  const { methods, onSubmit, signed, user } = useContext(authContext);
+  const { methods, onSubmit, signed, user, loading } = useContext(authContext);
 
   useEffect(() => {
     methods.reset();
@@ -46,7 +46,7 @@ export function Login() {
               inputName="password"
             />
 
-            <Button text="Entrar" />
+            <Button text="Entrar" loading={loading} />
           </Form>
         </FormProvider>
 

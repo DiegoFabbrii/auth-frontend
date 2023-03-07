@@ -19,7 +19,7 @@ import { FormProvider } from 'react-hook-form';
 
 export function Signup() {
   const signupContext = SignupContext;
-  const { registered, methods, onSubmit } = useContext(signupContext);
+  const { registered, methods, onSubmit, loading } = useContext(signupContext);
 
   useEffect(() => {
     methods.reset();
@@ -59,7 +59,7 @@ export function Signup() {
             inputName="password"
           />
 
-          <Button text="cadastre-se" />
+          <Button text="cadastre-se" loading={loading} />
         </Form>
       </FormProvider>
 

@@ -16,6 +16,7 @@ interface IAuthContext {
   signed: boolean;
   user: IUser | null;
   logout(): ReactNode;
+  loading: boolean;
 }
 
 interface AuthContextProviderProps {
@@ -38,6 +39,7 @@ export const AuthContext = createContext({} as IAuthContext);
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const methods = useForm<IFormValues>({ resolver: yupResolver(authSchema) });
   const [user, setUser] = useState<IUser | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (() => {
@@ -53,6 +55,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }, []);
 
   const onSubmit: SubmitHandler<FieldValues> = (data: FieldValues) => {
+    setLoading(true);
     api
       .post('/auth', data)
       .then((response) => {
@@ -63,8 +66,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
         localStorage.setItem('@Auth:token', token);
         localStorage.setItem('@Auth:user', JSON.stringify(userData));
+        setLoading(false);
       })
-      .catch((error) => alert(error.response.data.error));
+      .catch((error) => {
+        alert(error.response.data.error);
+        setLoading(false);
+      });
   };
 
   const logout = () => {
@@ -75,7 +82,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ methods, onSubmit, signed: !!user, user, logout }}
+      value={{ methods, onSubmit, signed: !!user, user, logout, loading }}
     >
       {children}
     </AuthContext.Provider>

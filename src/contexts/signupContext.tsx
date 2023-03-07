@@ -14,6 +14,7 @@ interface ISignupContext {
   userEmail: string | null;
   registered: boolean;
   methods: UseFormReturn<IFormValues, any>;
+  loading: boolean;
 }
 
 export interface IFormValues {
@@ -34,19 +35,25 @@ export function SignupContextProvider({
   const methods = useForm<IFormValues>({ resolver: yupResolver(signupSchema) });
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [registered, setRegistered] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<FieldValues> = (data: FieldValues) => {
+    setLoading(true);
     api
       .post('/register', data)
       .then(() => {
         setUserEmail(data.email);
         setRegistered(true);
+        setLoading(false);
       })
-      .catch((error) => alert(error.response.data.error));
+      .catch((error) => {
+        alert(error.response.data.error);
+        setLoading(false);
+      });
   };
   return (
     <SignupContext.Provider
-      value={{ onSubmit, methods, userEmail, registered }}
+      value={{ onSubmit, methods, userEmail, registered, loading }}
     >
       {children}
     </SignupContext.Provider>
